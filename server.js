@@ -1,6 +1,7 @@
+const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
@@ -36,4 +37,9 @@ app.get('/get-summary/:sessionId', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`✅ Server running at http://localhost:${PORT}`);
+});
+app.get('/new-session', (req, res) => {
+    const sessionId = uuidv4();
+    sessionData[sessionId] = {}; // initialize empty session storage
+    res.json({ sessionId });
 });

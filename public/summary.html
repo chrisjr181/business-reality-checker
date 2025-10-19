@@ -1,23 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Business Reality Checker - Summary
+  </title>
+  <link href="style.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
+<script>
+    async function fetchSummary() {
+        const sessionId = sessionStorage.getItem('sessionId');
+        if (!sessionId) {
+            alert("No session found. Please start over.");
+            window.location.href = "/form.html";
+            return;
+        }
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Business Reality Check Summary</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
+        try {
+            const res = await fetch(`/get-summary/${sessionId}`);
+            const data = await res.json();
 
-<body>
-    <div class="container">
-        <h1>🧾 Your Business Plan Summary</h1>
-        <div id="answers"></div>
-        <h2>📌 Recommendations</h2>
-        <ul id="recommendations"></ul>
-        <button onclick="restart()">Start Over</button>
+            if (data.error) {
+                alert("Session not found.");
+                return;
+            }
+
+            // ...rest of your summary logic...
+        } catch (err) {
+            console.error("Error fetching summary:", err);
+            alert("Could not load summary.");
+        }
+    }
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+</script>
+ </head>
+ <body>
+  <!--Header-->
+  <header class="main-header">
+   <div class="header-content">
+    <div class="left">
+     Small Biz Blueprints
     </div>
+    <div class="right">
+        
+    </div>
+    <nav class="center-nav">
+     <a href="index.html">
+      Home
+     </a>
+     <a href="form.html">
+      Plan
+     </a>
+     <a href="resources.html">
+      Resources
+     </a>
+    </nav>
+    
+   </div>
+  </header>
+  <div class="container">
+  <div class= "PDF">
+   <h1>
+    Your Business Readiness Summary
+   </h1>
+   <div id="answers">
+   </div>
+</div>
+   <h2>
+    Recommendations
+   </h2>
+   <ul id="recommendations">
+   </ul>
+  
+   <div class="nav-buttons" style="margin-top: 2rem;">
+    <button class="primary" id="download-pdf">
+     Download as PDF
+    </button>
+    <button class="secondary" onclick="restart()">
+     Start Over
+    </button>
+   </div>
+  </div>
+  <script src="summary.js">
+</script>
+  <script src="lib/jspdf.umd.min.js">
+</script>
+  
+  <script>
+    (function () {
+        function captureAndDownload() {
+            const container = document.querySelector(".container");
+            if (!container) {
+                alert("Could not find the summary container to export.");
+                return;
+            }
+            // Temporarily add white background for clean PDF
+            const prevBg = container.style.backgroundColor;
+            container.style.backgroundColor = "#ffffff";
 
-    <script src="summary.js"></script>
-</body>
+            // Use html2canvas for consistent rendering
+            html2canvas(container, { scale: 2, useCORS: true, logging: false, windowWidth: document.documentElement.scrollWidth })
+                .then(canvas => {
+                    const imgData = canvas.toDataURL("image/png");
+                    const pdf = new window.jspdf.jsPDF("p", "pt", "a4");
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
 
+                    // Fit image to page width and maintain aspect ratio
+                    const imgWidth = pageWidth - 40; // 20pt margin each side
+                    const ratio = canvas.height / canvas.width;
+                    const imgHeight = imgWidth * ratio;
+
+                    let y = 20;
+                    if (imgHeight <= pageHeight - 40) {
+                        pdf.addImage(imgData, "PNG", 20, y, imgWidth, imgHeight, undefined, "FAST");
+                    } else {
+                        // Add multiple pages if content is tall
+                        let remainingHeight = imgHeight;
+                        let position = 20;
+                        const pageCanvas = document.createElement("canvas");
+                        const pageCtx = pageCanvas.getContext("2d");
+
+                        // Calculate full-size image pixels corresponding to page slice
+                        const pageImgWidthPx = canvas.width * (imgWidth / (pageWidth - 40));
+                        const pageImgHeightPx = pageImgWidthPx * (pageHeight - 40) / imgWidth;
+
+                        while (remainingHeight > 0) {
+                            pageCanvas.width = canvas.width;
+                            pageCanvas.height = Math.min(pageImgHeightPx, canvas.height);
+                            pageCtx.fillStyle = "#fff";
+                            pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+                            pageCtx.drawImage(canvas, 0, canvas.height - remainingHeight * (canvas.width / imgWidth), pageCanvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
+                            const pageData = pageCanvas.toDataURL("image/png");
+                            if (position > 20) pdf.addPage();
+                            pdf.addImage(pageData, "PNG", 20, 20, imgWidth, pageHeight - 40, undefined, "FAST");
+                            remainingHeight -= (pageHeight - 40);
+                            position += pageHeight;
+                        }
+                    }
+                    pdf.save("BusinessRealitySummary.pdf");
+                    container.style.backgroundColor = prevBg || "";
+                })
+                .catch(err => {
+                    console.error("PDF export failed:", err);
+                    alert("PDF export failed. See console for details.");
+                });
+        }
+
+        // Attach to button
+        
+    })();
+</script>
+ </body>
 </html>
