@@ -458,3 +458,97 @@ button.secondary:hover {
     background-color: #0056b3;
     transform: scale(1.03);
 }
+
+/* About page */
+.center-nav a.active {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+}
+
+.about-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.about-card {
+    
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    padding: 1.5rem 1.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1.25rem;
+}
+
+.about-card h2 {
+    
+    margin-top: 0;
+}
+
+.about-list {
+    margin: 0.75rem 0 0 1rem;
+    padding: 0;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.about-mini {
+    background: rgba(0, 64, 128, 0.06);
+    border: 1px solid rgba(0, 64, 128, 0.12);
+    border-radius: 14px;
+    padding: 1.25rem;
+}
+
+.about-mini h3 {
+    margin-top: 0;
+}
+
+.about-cta {
+    text-align: center;
+    background: rgba(0, 64, 128, 0.9);
+    color: white;
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.about-cta .start-button {
+    display: inline-block;
+    margin-top: 0.75rem;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.purpose-card {
+    text-align: center;
+    padding: 2.5rem 2rem;
+}
+
+.purpose-title {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+}
+
+.purpose-text {
+    max-width: 750px;
+    margin: 0.75rem auto;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.purpose-thankyou {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+}
