@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reality Checker - Cuestionario</title>
+    <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="left">Small Biz Blueprints</div>
+            <div class="right">
+                <a href="/form.html">English</a> | <a href="/es/form.html">Español</a>
+            </div>
+
+            <nav class="center-nav">
+                <a href="/es/index.html">Inicio</a>
+                <a href="/es/form.html">Planificar</a>
+                <a href="/es/resources.html">Recursos</a>
+                <a href="/es/about.html">Acerca de</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="form-wrapper">
+        <div id="pre-question" class="question-card centered-card">
+            <h2>Antes de Comenzar</h2>
+            <p>
+                Para aprovechar al máximo esta herramienta, recomendamos completar primero
+                las siguientes dos hojas de trabajo descargables:
+            </p>
+
+            <div class="download-links">
+                <a href="../files/Monthly personal Budget.xlsx" download>📥 Presupuesto Personal Mensual</a>
+                <a href="../files/Monthly Business Budget Worksheets.xlsx" download>📥 Presupuesto Mensual del
+                    Negocio</a>
+            </div>
+
+            <p>Estas hojas de trabajo te ayudarán a responder muchas de las preguntas que vienen a continuación.</p>
+            <button onclick="startQuestionnaire()" class="primary">Comenzar Cuestionario</button>
+        </div>
+
+        <div id="questionnaire" style="display:none;">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="question-card">
+                <div id="question-container"></div>
+
+                <div class="nav-buttons">
+                    <button id="back-button" class="secondary">Atrás</button>
+                    <button id="skip-button" class="secondary">Saltar</button>
+                    <button id="next-button" class="primary">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startQuestionnaire() {
+            document.getElementById("pre-question").style.display = "none";
+            document.getElementById("questionnaire").style.display = "block";
+        }
+    </script>
+
+    <script src="/es/script.js"></script>
+</body>
+
+</html>

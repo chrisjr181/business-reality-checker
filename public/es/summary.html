@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Business Reality Checker - Resumen</title>
+    <link href="../style.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        async function fetchSummary() {
+            const sessionId = sessionStorage.getItem('sessionId');
+            if (!sessionId) {
+                alert("No se encontró ninguna sesión. Por favor comienza de nuevo.");
+                window.location.href = "/es/form.html";
+                return;
+            }
+
+            try {
+                const res = await fetch(`/get-summary/${sessionId}`);
+                const data = await res.json();
+
+                if (data.error) {
+                    alert("Sesión no encontrada.");
+                    return;
+                }
+
+                // ...rest of your summary logic...
+            } catch (err) {
+                console.error("Error fetching summary:", err);
+                alert("No se pudo cargar el resumen.");
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="left">Small Biz Blueprints</div>
+            <div class="right">
+                <a href="/summary.html">English</a> | <a href="/es/summary.html">Español</a>
+            </div>
+
+            <nav class="center-nav">
+                <a href="/es/index.html">Inicio</a>
+                <a href="/es/form.html">Planificar</a>
+                <a href="/es/resources.html">Recursos</a>
+                <a href="/es/about.html">Acerca de</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="PDF">
+            <h1>Resumen de Preparación de tu Negocio</h1>
+            <div id="answers"></div>
+        </div>
+
+        <h2>Recomendaciones</h2>
+        <ul id="recommendations"></ul>
+
+        <div class="nav-buttons" style="margin-top: 2rem;">
+            <button class="primary" id="download-pdf">Descargar PDF</button>
+            <button class="secondary" onclick="restart()">Comenzar de Nuevo</button>
+        </div>
+    </div>
+
+    <script src="/es/summary.js"></script>
+    <script src="../lib/jspdf.umd.min.js"></script>
+
+    <script>
+        (function () {
+            function captureAndDownload() {
+                const container = document.querySelector(".container");
+                if (!container) {
+                    alert("No se pudo encontrar el contenedor del resumen para exportarlo.");
+                    return;
+                }
+
+                const prevBg = container.style.backgroundColor;
+                container.style.backgroundColor = "#ffffff";
+
+                html2canvas(container, { scale: 2, useCORS: true, logging: false, windowWidth: document.documentElement.scrollWidth })
+                    .then(canvas => {
+                        const imgData = canvas.toDataURL("image/png");
+                        const pdf = new window.jspdf.jsPDF("p", "pt", "a4");
+                        const pageWidth = pdf.internal.pageSize.getWidth();
+                        const pageHeight = pdf.internal.pageSize.getHeight();
+
+                        const imgWidth = pageWidth - 40;
+                        const ratio = canvas.height / canvas.width;
+                        const imgHeight = imgWidth * ratio;
+
+                        let y = 20;
+                        if (imgHeight <= pageHeight - 40) {
+                            pdf.addImage(imgData, "PNG", 20, y, imgWidth, imgHeight, undefined, "FAST");
+                        } else {
+                            let remainingHeight = imgHeight;
+                            let position = 20;
+                            const pageCanvas = document.createElement("canvas");
+                            const pageCtx = pageCanvas.getContext("2d");
+
+                            const pageImgWidthPx = canvas.width * (imgWidth / (pageWidth - 40));
+                            const pageImgHeightPx = pageImgWidthPx * (pageHeight - 40) / imgWidth;
+
+                            while (remainingHeight > 0) {
+                                pageCanvas.width = canvas.width;
+                                pageCanvas.height = Math.min(pageImgHeightPx, canvas.height);
+                                pageCtx.fillStyle = "#fff";
+                                pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+                                pageCtx.drawImage(
+                                    canvas,
+                                    0,
+                                    canvas.height - remainingHeight * (canvas.width / imgWidth),
+                                    pageCanvas.width,
+                                    pageCanvas.height,
+                                    0,
+                                    0,
+                                    pageCanvas.width,
+                                    pageCanvas.height
+                                );
+                                const pageData = pageCanvas.toDataURL("image/png");
+                                if (position > 20) pdf.addPage();
+                                pdf.addImage(pageData, "PNG", 20, 20, imgWidth, pageHeight - 40, undefined, "FAST");
+                                remainingHeight -= (pageHeight - 40);
+                                position += pageHeight;
+                            }
+                        }
+                        pdf.save("ResumenDeNegocio.pdf");
+                        container.style.backgroundColor = prevBg || "";
+                    })
+                    .catch(err => {
+                        console.error("PDF export failed:", err);
+                        alert("La exportación del PDF falló. Revisa la consola para más detalles.");
+                    });
+            }
+
+            // Attach to button
+        })();
+    </script>
+</body>
+
+</html>
