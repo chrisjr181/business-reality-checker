@@ -8,14 +8,15 @@
     <link rel="stylesheet" href="style.css" />
     <style>
         body {
-  background-image: url('https://www.transparenttextures.com/patterns/blueprint.png');
-  background-color: #f8f8f8; /* dark blueprint navy */
-  background-size: auto;
-  background-attachment: fixed;
-  background-repeat: repeat;
-  font-family: 'Segoe UI', sans-serif;
-  color: #222;
-}
+            background-image: url('https://www.transparenttextures.com/patterns/blueprint.png');
+            background-color: #f8f8f8;
+            background-size: auto;
+            background-attachment: fixed;
+            background-repeat: repeat;
+            font-family: 'Segoe UI', sans-serif;
+            color: #222;
+        }
+
         .section {
             margin: 2rem auto;
             max-width: 900px;
@@ -85,81 +86,67 @@
 </head>
 
 <body>
-    <!Header>
-        <header class="main-header">
-            <div class="header-content">
-                <div class="left">Small Biz Blueprints</div>
-                <div class="right">
-                
-                </div>
-    
-                <nav class="center-nav">
-                    <a href="index.html">Home</a>
-                    <a href="form.html">Plan</a>
-                    <a href="resources.html">Resources</a>
-                    <a href="about.html">About</a>
-                </nav>
-    
-                
+    <header class="main-header">
+        <div class="header-content">
+            <div class="left">Small Biz Blueprints</div>
+            <div class="right">
+                <a href="/resources.html">English</a> | <a href="/es/resources.html">Español</a>
             </div>
-        </header>
 
-    <main class="hero">
-        <h1>📚 Small Business Resources</h1>
-        <p>Explore curated tools and links to help you plan, launch, and grow your business.</p>
-    </main>
+            <nav class="center-nav">
+                <a href="/index.html">Home</a>
+                <a href="/form.html">Plan</a>
+                <a href="/resources.html">Resources</a>
+                <a href="/about.html">About</a>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Section 1: Startup Tools (Image Right) -->
-    <div class="resource-row">
-        <div class="resource-text">
-            <h3>🚀 Startup Tools</h3>
-            <ul>
-                <li><a href="https://www.ncsbc.net/" target="_blank">Small Business Center Network</a></li>
-                <li><a href="https://www.alamancecc.edu/services-for-business-and-industry/small-business-center/index.php"
-                        target="_blank">Alamance CC Small Business Center </a></li>
-                <li><a href="https://www.sba.gov/business-guide/plan-your-business" target="_blank">SBA – Plan Your
-                        Business</a></li>
-                <li><a href="https://www.score.org/resource/business-plan-template-startup-business" target="_blank">Startup
-                        Business Plan Template (SCORE)</a></li>
-                <li><a href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online"
-                        target="_blank">Apply for an EIN (IRS)</a></li>
-                <li><a href="https://www.legalzoom.com/" target="_blank">LegalZoom – Business Formation Services</a></li>
-            </ul>
-        </div>
-        <div class="resource-image">
-            <img src="img/blueprint-overlook.png" alt="Blueprint Planning" />
-        </div>
-    </div>
-    
-    <!-- Section 2: Budget & Finance (Image Left) -->
-    <div class="resource-row flipped">
-        <div class="resource-image">
-            <img src="img/signing-check.png" alt="Signing Financial Documents" />
-        </div>
-        <div class="resource-text">
-            <h3>💵 Budget & Finance</h3>
-            <ul>
-                <li><a href="https://quickbooks.intuit.com/" target="_blank">QuickBooks – Accounting Software</a></li>
-                <li><a href="https://waveapps.com/" target="_blank">Wave – Free Accounting Tool</a></li>
-                <li><a href="https://bench.co/startups/" target="_blank">Bench – Bookkeeping for Startups</a></li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- Section 3: Marketing & Branding (Image Right) -->
-    <div class="resource-row">
-        <div class="resource-text">
-            <h3>📣 Marketing & Branding</h3>
-            <ul>
-                <li><a href="https://www.canva.com/" target="_blank">Canva – Design Tool for Branding</a></li>
-                <li><a href="https://mailchimp.com/" target="_blank">Mailchimp – Email Marketing</a></li>
-                <li><a href="https://www.shopify.com/" target="_blank">Shopify – E-commerce Platform</a></li>
-            </ul>
-        </div>
-        <div class="resource-image">
-            <img src="img/marketing-placeholder.png" alt="Marketing Strategy" />
-        </div>
-    </div>
+    <section class="hero">
+        <h1>Resources</h1>
+        <p>Helpful tools and links to help you plan, launch, and strengthen your small business.</p>
+    </section>
+
+    <section class="section">
+        <h2>🚀 Startup Tools</h2>
+        <ul class="resource-list">
+            <li><a href="https://www.ncsbc.net/" target="_blank">Small Business Center Network</a></li>
+            <li><a href="https://www.alamancecc.edu/services-for-business-and-industry/small-business-center/index.php"
+                    target="_blank">Alamance CC Small Business Center</a></li>
+            <li><a href="https://www.sba.gov/business-guide/plan-your-business" target="_blank">SBA – Plan Your
+                    Business</a></li>
+            <li><a href="https://www.score.org/resource/business-plan-template-startup-business" target="_blank">Startup
+                    Business Plan Template (SCORE)</a></li>
+            <li><a href="https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online"
+                    target="_blank">Apply for an EIN (IRS)</a></li>
+            <li><a href="https://www.legalzoom.com/" target="_blank">LegalZoom – Business Formation Services</a></li>
+        </ul>
+        <p class="resource-note">These resources can help with planning, legal setup, and early business formation
+            steps.</p>
+    </section>
+
+    <section class="section">
+        <h2>💵 Budget and Finance</h2>
+        <ul class="resource-list">
+            <li><a href="https://quickbooks.intuit.com/" target="_blank">QuickBooks – Accounting Software</a></li>
+            <li><a href="https://waveapps.com/" target="_blank">Wave – Free Accounting Tool</a></li>
+            <li><a href="https://bench.co/startups/" target="_blank">Bench – Bookkeeping for Startups</a></li>
+            <li><a href="files/Monthly personal Budget.xlsx" download>📥 Personal Monthly Budget</a></li>
+            <li><a href="files/Monthly Business Budget Worksheets.xlsx" download>📥 Monthly Business Budget</a></li>
+        </ul>
+        <p class="resource-note">Use these tools to understand your personal and business expenses before investing more
+            money.</p>
+    </section>
+
+    <section class="section">
+        <h2>📣 Marketing and Branding</h2>
+        <ul class="resource-list">
+            <li><a href="https://www.canva.com/" target="_blank">Canva – Design Tool for Branding</a></li>
+            <li><a href="https://mailchimp.com/" target="_blank">Mailchimp – Email Marketing</a></li>
+            <li><a href="https://www.shopify.com/" target="_blank">Shopify – E-commerce Platform</a></li>
+        </ul>
+        <p class="resource-note">These resources can help you present your business, build your brand, and reach
+            customers.</p>
     </section>
 </body>
 

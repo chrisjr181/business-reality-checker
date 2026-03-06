@@ -1,8 +1,9 @@
-async function fetchSummary() {
-    const sessionId = sessionStorage.getItem('sessionId');
+document.addEventListener("DOMContentLoaded", async () => {
+    const sessionId = sessionStorage.getItem("sessionId");
+
     if (!sessionId) {
-        alert("No session found. Please start over.");
-        window.location.href = "/form.html";
+        alert("No se encontró ninguna sesión. Por favor comienza de nuevo.");
+        window.location.href = "/es/form.html";
         return;
     }
 
@@ -11,180 +12,184 @@ async function fetchSummary() {
         const data = await res.json();
 
         if (data.error) {
-            alert("Session not found.");
+            alert("Sesión no encontrada.");
+            window.location.href = "/es/form.html";
             return;
         }
 
-        const answersDiv = document.getElementById("answers");
-        const recommendationsList = document.getElementById("recommendations");
-
-        const totalSteps = 16;
-        let skippedCount = 0;
-
-        // Render all answers
-        const questionLabels = [
-            "What kind of business are you starting?",
-            "Will you need a physical location?",
-            "What is the average monthly cost for licenses, permits, and legal registrations?",
-            "Do you have a business bank account and/or bookkeeping software?",
-            "How much will it cost to launch your product or service (supplies, equipment, packaging, etc.)?",
-            "Do you plan to hire staff or contractors in your first year?",
-            "What technology will you need (website, POS system, domain, hosting, design, tools)?",
-            "Do you have savings set aside specifically for your business?",
-            "How many months can you cover your personal bills while your business earns little or no income?",
-            "Are you relying on a loan or credit to start your business?",
-            "Which of the following will be recurring monthly costs for your business? (check all that apply)",
-            "Have you created a monthly budget or projected income/expenses for your first year?",
-            "How much profit do you realistically expect to make in the first 12 months?",
-            "Do you know your break-even point (how much you must sell to cover your costs)?",
-            "What will success look like for you in your first year?",
-            "What sacrifices are you willing to make to get your business off the ground?"
-        ];
-
-        for (let i = 1; i <= totalSteps; i++) {
-            const qData = data.answers[i] || "";
-            const p = document.createElement("p");
-            if (!qData || qData.trim() === "") {
-                p.innerHTML = `<strong>${questionLabels[i - 1]}:</strong> <span class="skipped">(Skipped)</span>`;
-            } else {
-                p.innerHTML = `<strong>${questionLabels[i - 1]}:</strong> ${qData}`;
-            }
-            answersDiv.appendChild(p);
-        }
-
-
-        // Custom Logic Recommendations
-        const recs = [];
-
-        // 1. Too many skipped
-        if (skippedCount >= 3) {
-            recs.push("You skipped 3 or more questions. Consider revisiting skipped areas for a more accurate readiness check.");
-        }
-
-        // 2. License/permit costs (Step 3)
-        const licenseAnswer = data.answers[3] || "";
-        if (licenseAnswer.toLowerCase().includes("no")) {
-            recs.push("You need to research license, permits, and legal registration costs for your state/county.");
-        }
-
-        // 3. Financial Planning (Steps 4, 6, 7)
-        const bankAnswer = data.answers[4] || "";
-        const payrollAnswer = data.answers[6] || "";
-        const techAnswer = data.answers[7] || "";
-
-        if (bankAnswer.includes("No")) {
-            recs.push("Setting up a proper business bank account and bookkeeping software is highly recommended.");
-        }
-        if (payrollAnswer.includes("Yes") && !payrollAnswer.match(/\d/)) {
-            recs.push("You plan to hire staff but didn’t provide payroll estimates. Add realistic payroll costs.");
-        }
-        if (!techAnswer.match(/\d/)) {
-            recs.push("You did not provide estimated technology costs. Research hosting, domain, or POS system fees.");
-        }
-
-        // 4. Personal Financial Runway (Step 8)
-        const runway = data.answers[8] || "";
-        if (runway.includes("0 months")) {
-            recs.push("You have no personal financial runway. Consider savings or a side income before launching.");
-        } else if (runway.includes("1–3 months")) {
-            recs.push("You have a short runway (1–3 months). Ensure your business can generate income quickly.");
-        }
-
-        // 5. Savings or Loan (Steps 9, 10)
-        const savings = data.answers[9] || "";
-        const loan = data.answers[10] || "";
-        if (savings.includes("No") && loan.includes("No")) {
-            recs.push("You have no savings or funding plan. Research funding options to cover startup costs.");
-        }
-
-        // 6. Recurring Costs (Step 11)
-        const recurring = data.answers[11] || "";
-        if (!recurring) {
-            recs.push("You didn’t select recurring monthly costs. Identify and plan for ongoing expenses.");
-        }
-
-        // 7. Budget and Profit (Steps 12, 13)
-        const budget = data.answers[12] || "";
-        const profit = data.answers[13] || "";
-        if (budget.includes("No")) {
-            recs.push("You need to create a monthly budget or income/expense projection for the first year.");
-        }
-        if (profit.includes("Over $20,000") && (runway.includes("0") || savings.includes("No"))) {
-            recs.push("Your profit expectations seem high. Re-check your assumptions against realistic data.");
-        }
-
-        // 8. Break-even Point (Step 14)
-        const breakeven = data.answers[14] || "";
-        if (breakeven.includes("No")) {
-            recs.push("You need to calculate your break-even point (how much you must sell to cover costs).");
-        }
-
-        // Display recommendations
-        if (recs.length > 0) {
-            recs.forEach(msg => {
-                const li = document.createElement("li");
-                li.textContent = msg;
-                recommendationsList.appendChild(li);
-            });
-        } else {
-            const li = document.createElement("li");
-            li.textContent = "✅ All answers look great. You're ready to move forward!";
-            recommendationsList.appendChild(li);
-        }
+        renderSummary(data.answers || {});
     } catch (err) {
-        console.error("Error fetching summary:", err);
-        alert("Could not load summary.");
+        console.error("Error loading summary:", err);
+        alert("No se pudo cargar el resumen.");
+    }
+});
+
+function renderSummary(answers) {
+    const answersDiv = document.getElementById("answers");
+    const recommendationsList = document.getElementById("recommendations");
+
+    answersDiv.innerHTML = "";
+    recommendationsList.innerHTML = "";
+
+    const questionLabels = [
+        "¿Qué tipo de negocio estás comenzando?",
+        "¿Necesitarás una ubicación física?",
+        "¿Cuál es el costo mensual promedio de licencias, permisos y registros legales?",
+        "¿Tienes una cuenta bancaria comercial y/o software de contabilidad?",
+        "¿Cuánto costará lanzar tu producto o servicio (insumos, equipo, empaque, etc.)?",
+        "¿Planeas contratar empleados o contratistas en tu primer año?",
+        "¿Qué tecnología necesitarás (sitio web, sistema POS, dominio, hosting, diseño, herramientas)?",
+        "¿Tienes ahorros apartados específicamente para tu negocio?",
+        "¿Cuántos meses puedes cubrir tus gastos personales mientras tu negocio gana poco o ningún ingreso?",
+        "¿Dependes de un préstamo o crédito para comenzar tu negocio?",
+        "¿Cuáles de los siguientes serán costos mensuales recurrentes para tu negocio? (marca todos los que correspondan)",
+        "¿Has creado un presupuesto mensual o una proyección de ingresos/gastos para tu primer año?",
+        "¿Cuánta ganancia esperas obtener de manera realista en los primeros 12 meses?",
+        "¿Conoces tu punto de equilibrio (cuánto debes vender para cubrir tus costos)?",
+        "¿Cómo se verá el éxito para ti en tu primer año?",
+        "¿Qué sacrificios estás dispuesto a hacer para poner en marcha tu negocio?"
+    ];
+
+    const recs = [];
+
+    for (let i = 1; i <= questionLabels.length; i++) {
+        const value = answers[i] || "";
+
+        const item = document.createElement("div");
+        item.className = "answer-item";
+
+        const label = document.createElement("h3");
+        label.textContent = `${i}. ${questionLabels[i - 1]}`;
+
+        const response = document.createElement("p");
+        if (value && value.trim() !== "") {
+            response.textContent = value;
+        } else {
+            response.innerHTML = `<span class="skipped">(Omitido)</span>`;
+        }
+
+        item.appendChild(label);
+        item.appendChild(response);
+        answersDiv.appendChild(item);
+    }
+
+    // Recommendations logic
+    const q3 = (answers[3] || "").toLowerCase();
+    const q4 = (answers[4] || "").toLowerCase();
+    const q8 = (answers[8] || "").toLowerCase();
+    const q9 = (answers[9] || "").toLowerCase();
+    const q10 = (answers[10] || "").toLowerCase();
+    const q11 = (answers[11] || "").toLowerCase();
+    const q12 = (answers[12] || "").toLowerCase();
+    const q13 = (answers[13] || "").toLowerCase();
+    const q14 = (answers[14] || "").toLowerCase();
+    const q15 = (answers[15] || "").trim();
+    const q16 = (answers[16] || "").toLowerCase();
+
+    if (!answers[3] || q3.includes("todavía")) {
+        recs.push("Necesitas reunir mejor los detalles sobre licencias, permisos y registros legales para evitar costos sorpresa.");
+    }
+
+    if (!answers[4] || q4.includes("manual")) {
+        recs.push("Considera abrir una cuenta bancaria comercial y usar una herramienta de contabilidad para mantener tus finanzas organizadas.");
+    }
+
+    if (!answers[8] || q8 === "no") {
+        recs.push("Intenta apartar algunos ahorros específicamente para tu negocio antes de lanzar.");
+    }
+
+    if (!answers[9] || q9.includes("0–6")) {
+        recs.push("Tu margen financiero personal parece ajustado. Considera crear un colchón más fuerte antes de depender del negocio.");
+    }
+
+    if (answers[10] && q10.includes("sí")) {
+        recs.push("Como dependes de préstamo o crédito, asegúrate de que tu plan incluya pagos mensuales realistas y flujo de caja.");
+    }
+
+    if (answers[11] && q11.length > 0) {
+        recs.push("Revisa cuidadosamente tus costos mensuales recurrentes para asegurarte de que tus ingresos proyectados puedan sostenerlos.");
+    } else {
+        recs.push("Haz una lista clara de tus gastos mensuales recurrentes para entender el costo real de operar tu negocio.");
+    }
+
+    if (!answers[12] || q12.includes("no")) {
+        recs.push("Debes crear un presupuesto mensual o una proyección de ingresos/gastos para tu primer año.");
+    }
+
+    if (answers[13] && q13.includes("ninguna")) {
+        recs.push("Si esperas no obtener ganancia al principio, asegúrate de tener suficiente respaldo financiero para sostenerte.");
+    }
+
+    if (!answers[14] || q14.includes("no")) {
+        recs.push("Necesitas calcular tu punto de equilibrio para saber cuánto debes vender para cubrir tus costos.");
+    }
+
+    if (!q15) {
+        recs.push("Define una visión clara de cómo se verá el éxito en tu primer año para mantener tus decisiones enfocadas.");
+    }
+
+    if (answers[16] && q16.includes("aún no estoy seguro")) {
+        recs.push("Piensa con honestidad qué sacrificios estás dispuesto a hacer, porque lanzar un negocio casi siempre exige tiempo, dinero o comodidad.");
+    }
+
+    if (recs.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "✅ Todas tus respuestas se ven muy bien. ¡Estás listo para avanzar!";
+        recommendationsList.appendChild(li);
+    } else {
+        recs.forEach(rec => {
+            const li = document.createElement("li");
+            li.textContent = rec;
+            recommendationsList.appendChild(li);
+        });
+    }
+
+    const pdfButton = document.getElementById("download-pdf");
+    if (pdfButton) {
+        pdfButton.addEventListener("click", downloadPDF);
     }
 }
 
 function restart() {
-    const sessionId = sessionStorage.getItem('sessionId');
-    if (sessionId) {
-        fetch(`/end-session/${sessionId}`, { method: "DELETE" });
-        sessionStorage.removeItem('sessionId');
-    }
-    window.location.href = "/form.html";
+    sessionStorage.removeItem("sessionId");
+    window.location.href = "/es/form.html";
 }
 
-document.addEventListener("DOMContentLoaded", fetchSummary);
-
-// PDF Download
-(function wirePdfButtonOnce() {
-    const btn = document.getElementById("download-pdf");
-    if (!btn || btn.dataset.bound === "1") return;
-    btn.dataset.bound = "1";
-    btn.addEventListener("click", generatePDF);
-})();
-
-async function generatePDF(e) {
-    e?.preventDefault?.();
-
+function downloadPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF("p", "pt", "a4");
 
-    // Clone the content so we can strip UI without changing the live page
-    const live = document.querySelector(".container");
-    const clone = live.cloneNode(true);
+    const doc = new jsPDF();
+    const container = document.querySelector(".container");
 
-    // Remove buttons and anything tagged for exclusion
-    clone.querySelectorAll(".nav-buttons, #download-pdf, [data-pdf-exclude]")
-        .forEach(el => el.remove());
+    if (!container) {
+        alert("No se pudo encontrar el contenido para exportar.");
+        return;
+    }
 
-    // Optional: ensure white background
-    clone.style.background = "#ffffff";
+    html2canvas(container, {
+        scale: 2,
+        useCORS: true
+    }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const imgWidth = 190;
+        const pageHeight = 295;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 10;
 
-    await doc.html(clone, {
-        x: 20,
-        y: 20,
-        width: 550,
-        windowWidth: 800,
-        // Safety: ignore elements if any slipped through
-        html2canvas: {
-            ignoreElements: el => el?.classList?.contains("nav-buttons") || el?.closest?.(".nav-buttons")
-        },
-        callback(pdf) {
-            pdf.save("BusinessRealitySummary.pdf");
+        doc.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight + 10;
+            doc.addPage();
+            doc.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
         }
+
+        doc.save("ResumenDeNegocio.pdf");
+    }).catch(err => {
+        console.error("PDF export failed:", err);
+        alert("La exportación del PDF falló.");
     });
 }
-

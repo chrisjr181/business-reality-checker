@@ -7,12 +7,12 @@ async function getOrCreateSession() {
             const data = await res.json();
             sessionId = data.sessionId;
             sessionStorage.setItem('sessionId', sessionId);
-            console.log('New session started:', sessionId);
+            console.log('Nueva sesión iniciada:', sessionId);
         } catch (err) {
-            console.error('Failed to create session:', err);
+            console.error('No se pudo crear la sesión:', err);
         }
     } else {
-        console.log('Existing session found:', sessionId);
+        console.log('Sesión existente encontrada:', sessionId);
     }
     return sessionId;
 }
@@ -22,126 +22,129 @@ const questions = [
     // Business Setup
     {
         step: 1,
-        label: "What kind of business are you starting?",
+        label: "¿Qué tipo de negocio estás comenzando?",
         type: "multiple",
         options: [
-            "Service (E.g., Cleaning, Consulting)",
-            "Product-based (E.g., Handmade Goods, Retail)",
-            "Digital (E.g., Online Store, Content Creation)",
-            "Food-based (E.g., Catering, Food Truck)",
-            "Other"
+            "Servicio (ej. limpieza, consultoría)",
+            "Basado en productos (ej. productos hechos a mano, venta al por menor)",
+            "Digital (ej. tienda en línea, creación de contenido)",
+            "Basado en comida (ej. catering, food truck)",
+            "Otro"
         ]
     },
     {
         step: 2,
-        label: "Will you need a physical location?",
+        label: "¿Necesitarás una ubicación física?",
         type: "multiple",
         options: [
-            "No (Home-based or online only)",
-            "Yes, (Rented office/Storefront)",
-            "Yes, (Purchase a building)"
+            "No (desde casa o solo en línea)",
+            "Sí (oficina o local rentado)",
+            "Sí (comprar un edificio)"
         ]
     },
     {
         step: 3,
-        label: "What is the average monthly cost for licenses, permits, and legal registrations?",
+        label: "¿Cuál es el costo mensual promedio de licencias, permisos y registros legales?",
         type: "textOrNumber",
-        options: ["Estimated cost: ", "Still gathering details"]
+        options: ["Costo estimado: ", "Todavía estoy reuniendo detalles"]
     },
     {
         step: 4,
-        label: "Do you have a business bank account and/or bookkeeping software?",
+        label: "¿Tienes una cuenta bancaria comercial y/o software de contabilidad?",
         type: "textOrNumber",
-        options: ["Estimated Monthly Cost: ", "I'll manage finances manually. (Note, risky for long term)"]
-
+        options: ["Costo mensual estimado: ", "Manejaré las finanzas manualmente (nota: riesgoso a largo plazo)"]
     },
+
     // Start-Up Expenses
     {
         step: 5,
-        label: "How much will it cost to launch your product or service (supplies, equipment, packaging, etc.)?",
+        label: "¿Cuánto costará lanzar tu producto o servicio (insumos, equipo, empaque, etc.)?",
         type: "multiple",
-        options: ["$0–$500", "$500–$5,000", "$5,000–$25,000", "Over $25,000"]
+        options: ["$0–$500", "$500–$5,000", "$5,000–$25,000", "Más de $25,000"]
     },
     {
         step: 6,
-        label: "Do you plan to hire staff or contractors in your first year?",
+        label: "¿Planeas contratar empleados o contratistas en tu primer año?",
         type: "textOrNumber",
-        options: ["Yes – Estimated Monthly Payroll: ", "No – I'll run things solo"]
+        options: ["Sí – Nómina mensual estimada: ", "No – Lo manejaré yo solo"]
     },
     {
         step: 7,
-        label: "What technology will you need (website, POS system, domain, hosting, design, tools)?",
+        label: "¿Qué tecnología necesitarás (sitio web, sistema POS, dominio, hosting, diseño, herramientas)?",
         type: "dualInput",
-        options: ["Estimated Total for Startup:", "Ongoing Monthly:"]
+        options: ["Total estimado de inicio:", "Costo mensual continuo:"]
     },
+
     // Personal Finance Impact
     {
         step: 8,
-        label: "Do you have savings set aside specifically for your business?",
+        label: "¿Tienes ahorros apartados específicamente para tu negocio?",
         type: "textOrNumber",
-        options: ["Yes – Amount: ", "No"]
+        options: ["Sí – Cantidad: ", "No"]
     },
     {
         step: 9,
-        label: "How many months can you cover your personal bills while your business earns little or no income?",
+        label: "¿Cuántos meses puedes cubrir tus gastos personales mientras tu negocio gana poco o ningún ingreso?",
         type: "multiple",
-        options: ["0–6 Months", "6–12 Months", "1–2 Years", "2+ Years"]
+        options: ["0–6 meses", "6–12 meses", "1–2 años", "Más de 2 años"]
     },
     {
         step: 10,
-        label: "Are you relying on a loan or credit to start your business?",
+        label: "¿Dependes de un préstamo o crédito para comenzar tu negocio?",
         type: "textOrNumber",
-        options: ["Yes – Amount: ", "No – Self-Funded"]
+        options: ["Sí – Cantidad: ", "No – Autofinanciado"]
     },
+
     // Ongoing Costs
     {
         step: 11,
-        label: "Which of the following will be recurring monthly costs for your business? (check all that apply)",
+        label: "¿Cuáles de los siguientes serán costos mensuales recurrentes para tu negocio? (marca todos los que correspondan)",
         type: "checkbox",
         options: [
-            "Rent or mortgage",
-            "Internet & phone",
-            "Utilities",
-            "Software subscriptions (QuickBooks, Canva, Shopify, etc.)",
-            "Marketing/advertising",
-            "Inventory restocking",
-            "Loan repayment"
+            "Renta o hipoteca",
+            "Internet y teléfono",
+            "Servicios públicos",
+            "Suscripciones de software (QuickBooks, Canva, Shopify, etc.)",
+            "Mercadeo/publicidad",
+            "Reposición de inventario",
+            "Pago de préstamos"
         ]
     },
     {
         step: 12,
-        label: "Have you created a monthly budget or projected income/expenses for your first year?",
+        label: "¿Has creado un presupuesto mensual o una proyección de ingresos/gastos para tu primer año?",
         type: "multiple",
-        options: ["Yes", "No – Still working on it"]
+        options: ["Sí", "No – Todavía estoy trabajando en eso"]
     },
     {
         step: 13,
-        label: "How much profit do you realistically expect to make in the first 12 months?",
+        label: "¿Cuánta ganancia esperas obtener de manera realista en los primeros 12 meses?",
         type: "multiple",
-        options: ["None – Just breaking even", "$1–$5,000", "$5,000–$20,000", "Over $20,000"]
+        options: ["Ninguna – Solo cubrir gastos", "$1–$5,000", "$5,000–$20,000", "Más de $20,000"]
     },
     {
         step: 14,
-        label: "Do you know your break-even point (how much you must sell to cover your costs)?",
+        label: "¿Conoces tu punto de equilibrio (cuánto debes vender para cubrir tus costos)?",
         type: "multiple",
-        options: ["Yes", "No – Still calculating"]
+        options: ["Sí", "No – Aún lo estoy calculando"]
     },
+
     // Final Reflection
     {
         step: 15,
-        label: "What will success look like for you in your first year?",
+        label: "¿Cómo se verá el éxito para ti en tu primer año?",
         type: "textarea"
     },
     {
         step: 16,
-        label: "What sacrifices are you willing to make to get your business off the ground?",
+        label: "¿Qué sacrificios estás dispuesto a hacer para poner en marcha tu negocio?",
         type: "multiple",
         options: [
-            "Time with friends/family",
-            "Reducing personal expenses",
-            "Working another job on the side",
-            "Delaying personal goals",
-            "I’m not sure yet"
+            "Tiempo con amigos/familia",
+            "Reducir gastos personales",
+            "Trabajar en otro empleo al mismo tiempo",
+            "Retrasar metas personales",
+            "Aún no estoy seguro"
         ]
     }
 ];
@@ -180,80 +183,79 @@ function loadQuestion(index) {
             inputDiv.appendChild(btn);
         });
     } else if (q.type === "textOrNumber") {
-    q.options.forEach(opt => {
-        const wrapper = document.createElement("div");
+        q.options.forEach(opt => {
+            const wrapper = document.createElement("div");
 
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = "choice";
-        radio.value = opt;
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "choice";
+            radio.value = opt;
 
-        const labelText = document.createElement("label");
-        labelText.textContent = opt.includes(":") ? opt.split(":")[0] : opt;
+            const labelText = document.createElement("label");
+            labelText.textContent = opt.includes(":") ? opt.split(":")[0] : opt;
 
-        wrapper.appendChild(radio);
-        wrapper.appendChild(labelText);
+            wrapper.appendChild(radio);
+            wrapper.appendChild(labelText);
 
-        const optLower = opt.toLowerCase();
-        // ✅ Detect any option that should have a numeric field
-        if (
-            optLower.includes("estimated") ||
-            optLower.includes("amount") ||
-            optLower.includes("cost") ||
-            opt.includes(":")
-        ) {
-            const input = document.createElement("input");
-            input.type = "number";
-            input.placeholder = "$0";
-            input.min = "0";
-            input.step = "0.01";
-            input.inputMode = "decimal";
-            input.className = "inline-input";
+            const optLower = opt.toLowerCase();
+            if (
+                optLower.includes("estimado") ||
+                optLower.includes("cantidad") ||
+                optLower.includes("costo") ||
+                opt.includes(":")
+            ) {
+                const input = document.createElement("input");
+                input.type = "number";
+                input.placeholder = "$0";
+                input.min = "0";
+                input.step = "0.01";
+                input.inputMode = "decimal";
+                input.className = "inline-input";
 
-            // ✅ Auto-select the radio if user starts typing
-            input.addEventListener("input", () => {
-                if (input.value.trim() !== "") {
-                    radio.checked = true;
-                }
-            });
+                input.addEventListener("input", () => {
+                    if (input.value.trim() !== "") {
+                        radio.checked = true;
+                    }
+                });
 
-            wrapper.appendChild(input);
-        }
+                wrapper.appendChild(input);
+            }
 
-        inputDiv.appendChild(wrapper);
-    });
-} else if (q.type === "dualInput") {
+            inputDiv.appendChild(wrapper);
+        });
+    } else if (q.type === "dualInput") {
         q.options.forEach(opt => {
             const label = document.createElement("label");
             label.textContent = opt;
+
             const input = document.createElement("input");
             input.type = "number";
             input.placeholder = "$0";
             input.className = "inline-input";
+
             inputDiv.appendChild(label);
             inputDiv.appendChild(input);
         });
     } else if (q.type === "checkbox") {
         q.options.forEach(opt => {
             const wrapper = document.createElement("div");
+
             const check = document.createElement("input");
             check.type = "checkbox";
             check.value = opt;
+
             const label = document.createElement("label");
             label.textContent = opt;
+
             wrapper.appendChild(check);
             wrapper.appendChild(label);
             inputDiv.appendChild(wrapper);
-            
-
-            
-            
         });
     } else if (q.type === "textarea") {
         const textarea = document.createElement("textarea");
         textarea.id = "answer-text";
         textarea.rows = 4;
-        textarea.placeholder = "Type your response here...";
+        textarea.placeholder = "Escriba su respuesta aquí...";
         inputDiv.appendChild(textarea);
     }
 
@@ -287,7 +289,7 @@ async function saveAnswer(skip = false) {
     }
 
     if (!skip && !answer) {
-        alert("Please answer or click Skip.");
+        alert("Por favor responda o haga clic en Saltar.");
         return;
     }
 
@@ -301,7 +303,7 @@ async function saveAnswer(skip = false) {
     if (currentStep < questions.length) {
         loadQuestion(currentStep);
     } else {
-        window.location.href = "/summary.html";
+        window.location.href = "/es/summary.html";
     }
 }
 
